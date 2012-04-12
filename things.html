@@ -1,0 +1,33 @@
+<head>
+	<title>Things on Meteor</title>
+</head>
+<body>
+	<h1>Things</h1>
+	<p></p>
+	{{> thing_list}}
+</body>
+
+<template name="thing_list">
+	<ul>
+		{{#each things}}
+			{{> thing_info}}
+		{{else}}
+			<li>No things yet.</li>
+		{{/each}}
+	</ul>
+	<div class="footer">
+		<button class="like">Like!</button>
+    <button class="dislike">Dislike!</button>
+		<br />
+		<label for="new">New thing:</label> <input id="new" type="text" /> <span id="message"></span>
+	</div>
+</template>
+
+<template name="thing_info">
+	<li class="{{maybe_selected}}">
+		{{how_many}} {{name}}
+		{{#if likes}}
+			<b>{{likes}}</b>
+		{{/if}}
+	</li>
+</template>
