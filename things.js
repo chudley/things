@@ -7,9 +7,14 @@ if(Meteor.is_client){
 	
 	Template.thing_list.events = {
 		'click button.like': function(){
-			var thing = Things.findOne({_id: Session.get("session_thing")})
+			var thing = Things.findOne({_id: Session.get("session_thing")});
 			Things.update(thing, {$inc: {likes: 1}});
 			console.log("Liked " + thing.name + " (" + thing._id + ")");
+		},
+		'click button.dislike': function(){
+			var thing = Things.findOne({_id: Session.get("session_thing")});
+			Things.update(thing, {$inc: {dislikes: 1}});
+			console.log("Disliked " + thing.name + " (" + thing._id + ")");
 		},
 		'keyup #new': function(evt){
 			if(evt.which == 13){
@@ -24,7 +29,7 @@ if(Meteor.is_client){
 				else{
 					$('#message').html("");
 					$('#new').val("");
-					var thing = Things.findOne({_id: Things.insert({name: text})}); // Don't know an easier way to do this
+					var thing = Things.findOne({_id: Things.insert({name: text, likes: 0, dislikes: 0})}); // Don't know an easier way to do this
 					console.log("Added " + thing.name + " (" + thing._id + ")");
 				}
 			}
@@ -37,12 +42,19 @@ if(Meteor.is_client){
 	};
 
 	Template.thing_info.how_many = function(){
-		if(!this.likes) return "Nobody likes";
-		if(this.likes == 1) return "One person likes";
-		if(this.likes < 5) return "A few people like";
-		if(this.likes < 20) return "Some people like";
-		return "A lot of people like"; 
-  };
+		if(this.likes > this.dislikes){
+			//favourable
+			return "People like "
+		}
+		else if(this.likes < this.dislikes) {
+			//not favourable
+			return "People dislike "
+		}
+		else {
+			//neutral
+			return "People are undecided about "
+		}
+	};
 	Template.thing_info.events = {
 		'click': function(){
 			Session.set("session_thing", this._id);

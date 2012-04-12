@@ -25,9 +25,6 @@
 
 <template name="thing_info">
 	<li class="{{maybe_selected}}">
-		{{how_many}} {{name}}
-		{{#if likes}}
-			<b>{{likes}}</b>
-		{{/if}}
+		{{how_many}} {{name}} <span class="like">{{likes}}</span> / <span class="dislike">{{dislikes}}</span>
 	</li>
 </template>
